@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-surface-900 text-gray-100 antialiased min-h-screen;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-surface-800/80 backdrop-blur-md border border-surface-600/50;
+  }
+}

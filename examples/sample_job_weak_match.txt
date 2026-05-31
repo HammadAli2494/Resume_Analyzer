@@ -1,0 +1,18 @@
+Senior Frontend Engineer (React)
+
+We need a Senior Frontend Engineer to lead our customer-facing web application.
+
+Requirements
+• 5+ years building production React applications
+• Expert in JavaScript, TypeScript, HTML5, CSS3
+• Experience with state management (Redux, Zustand) and React Router
+• Strong understanding of REST APIs and GraphQL integration
+• Web performance optimization and accessibility (WCAG)
+• CI/CD with GitHub Actions; unit testing with Jest and React Testing Library
+• Experience with Figma and design systems
+
+Nice to have
+• Next.js, Vite, or similar modern build tooling
+• Node.js backend experience
+
+This role does not focus on machine learning or data science.

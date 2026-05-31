@@ -1,0 +1,70 @@
+resume_text,job_text,label,role
+"Maria Chen | Data Scientist | 4 years. Python, SQL, scikit-learn, pandas, A/B testing. Built churn models for SaaS. MS Statistics.","Senior Data Scientist — Python, SQL, ML modeling, experimentation, stakeholder communication. 3+ years.",1,Data Scientist
+"James Okonkwo | Backend Engineer | 6 years. Java, Spring Boot, PostgreSQL, Kafka, AWS. Led payment API team.","Backend Software Engineer — Java/Spring, REST APIs, SQL, distributed systems, AWS.",1,Software Engineer
+"Priya Sharma | ML Engineer | 3 years. PyTorch, NLP, MLOps, Docker, Kubernetes. Fine-tuned LLMs for support tickets.","Machine Learning Engineer — deep learning, NLP, model deployment, Python, Docker/K8s.",1,ML Engineer
+"Liam Foster | Data Analyst | 2 years. SQL, Excel, Tableau, Python basics, dashboarding for marketing.","Data Analyst — SQL, Tableau/Power BI, reporting, business metrics, Excel.",1,Data Analyst
+"Elena Vasquez | DevOps | 5 years. Terraform, AWS, CI/CD, Prometheus, Linux. On-call for production clusters.","DevOps Engineer — AWS, Terraform, Kubernetes, monitoring, incident response.",1,DevOps Engineer
+"Tom Bradley | Frontend | 4 years. React, TypeScript, CSS, accessibility, Jest. Built design system components.","Frontend Developer — React, TypeScript, responsive UI, testing, WCAG awareness.",1,Frontend Engineer
+"Sarah Kim | Product Manager | 6 years B2B SaaS. Roadmaps, user research, SQL for metrics, Agile/Scrum lead.","Product Manager — discovery, prioritization, cross-functional leadership, analytics literacy.",1,Product Manager
+"Ahmed Hassan | Security Analyst | 3 years. SIEM, threat hunting, Python scripting, ISO 27001 audits.","Security Analyst — SOC operations, log analysis, incident response, compliance.",1,Security Analyst
+"Rachel Nguyen | QA Engineer | 4 years. Selenium, Cypress, API testing, Postman, CI test pipelines.","QA Automation Engineer — test frameworks, regression suites, API validation.",1,QA Engineer
+"Chris Patel | Full Stack | 5 years. Django, React, PostgreSQL, Redis, Heroku/AWS. Startup generalist.","Full Stack Engineer — Python web backend, React frontend, SQL databases.",1,Full Stack Engineer
+"Nina Weber | BI Developer | 3 years. Power BI, DAX, SQL Server, ETL with SSIS, finance reporting.","BI Developer — Power BI, SQL, data modeling, executive dashboards.",1,BI Developer
+"David Okafor | Mobile | 4 years. Swift, iOS, UIKit, SwiftUI, App Store releases, push notifications.","iOS Developer — Swift, mobile architecture, performance, App Store deployment.",1,iOS Developer
+"Jessica Morales | HR Generalist | 7 years. Recruiting, onboarding, HRIS (Workday), employee relations.","HR Generalist — full-cycle recruiting, policy, HRIS administration.",1,HR Generalist
+"Kevin Zhang | Cloud Architect | 8 years. AWS Solutions Architect, multi-account landing zones, cost optimization.","Cloud Architect — AWS design, security, IaC, enterprise migration.",1,Cloud Architect
+"Amanda Lewis | UX Designer | 5 years. Figma, user interviews, wireframes, usability testing, design systems.","UX Designer — research, prototyping, interaction design, collaboration with engineering.",1,UX Designer
+"Brian O'Connor | Sales Engineer | 6 years. Technical demos, Python integrations, CRM (Salesforce), APIs.","Sales Engineer — pre-sales technical discovery, integration scoping, demos.",1,Sales Engineer
+"Fatima Ali | NLP Research | PhD candidate. Transformers, Hugging Face, PyTorch, academic publications.","NLP Research Scientist — language models, evaluation, Python, publications.",1,NLP Research
+"George Miller | Sysadmin | 10 years. Windows Server, Active Directory, VMware, backup/DR, networking.","Systems Administrator — Windows/Linux servers, virtualization, patching.",1,Sysadmin
+"Hannah Brooks | Content Strategist | 4 years. SEO, CMS (WordPress), analytics, B2C brand voice.","Content Marketing Manager — SEO, editorial calendar, performance tracking.",1,Content Marketing
+"Ivan Petrov | Embedded | 5 years. C, RTOS, ARM microcontrollers, firmware testing, hardware bring-up.","Embedded Software Engineer — C/C++, firmware, hardware interfaces, debugging.",1,Embedded Engineer
+"Julia Santos | Customer Success | 3 years. SaaS onboarding, churn analysis, Zendesk, quarterly business reviews.","Customer Success Manager — retention, adoption metrics, client relationships.",1,Customer Success
+"Kyle Adams | Data Engineer | 4 years. Spark, Airflow, dbt, Snowflake, pipeline reliability SLAs.","Data Engineer — ETL/ELT, orchestration, cloud warehouses, Python/SQL.",1,Data Engineer
+"Laura Chen | Graphic Designer | 6 years. Adobe Creative Suite, brand identity, print and digital campaigns.","Graphic Designer — visual design, branding, Adobe CC proficiency.",1,Graphic Designer
+"Marcus Johnson | Network Engineer | 7 years. Cisco, BGP, firewalls, VPN, datacenter cabling standards.","Network Engineer — routing/switching, firewall policies, troubleshooting.",1,Network Engineer
+"Olivia Grant | Pharmacist | 5 years retail + hospital. Medication therapy, inventory, patient counseling.","Clinical Pharmacist — dispensing, drug interactions, patient education.",1,Pharmacist
+"Paul Rivera | Mechanical Engineer | 4 years. SolidWorks, FEA, manufacturing tolerances, HVAC systems.","Mechanical Design Engineer — CAD, thermal analysis, prototyping.",1,Mechanical Engineer
+"Quinn Taylor | Technical Writer | 3 years. API docs, developer portals, Markdown, Git workflows.","Technical Writer — software documentation, developer audience, clarity.",1,Technical Writer
+"Rita Kapoor | Finance Analyst | 4 years. FP&A, Excel models, variance analysis, NetSuite.","Financial Analyst — budgeting, forecasting, Excel, ERP reporting.",1,Finance Analyst
+"Samuel Wright | Game Developer | 3 years. Unity, C#, gameplay programming, shader basics.","Game Developer — Unity, gameplay systems, performance optimization.",1,Game Developer
+"Tanya Volkov | Data Scientist | 4 years. Python, SQL, scikit-learn, pandas, A/B testing. Built churn models.","Frontend Developer — React, TypeScript, pixel-perfect UI, CSS animations.",0,Data Scientist
+"James Okonkwo | Backend Engineer | 6 years. Java, Spring Boot, PostgreSQL, Kafka.","UX Designer — Figma, user research, wireframes, no coding required.",0,Software Engineer
+"Priya Sharma | ML Engineer | PyTorch, NLP, Docker. Fine-tuned LLMs.","Account Executive — B2B outbound sales, quota carrying, CRM hygiene.",0,ML Engineer
+"Liam Foster | Data Analyst | SQL, Excel, Tableau, Python basics.","Senior DevOps — 8+ years Kubernetes at scale, on-call lead, SRE mindset.",0,Data Analyst
+"Elena Vasquez | DevOps | Terraform, AWS, CI/CD.","Registered Nurse — bedside care, vitals, EMR documentation, 12-hour shifts.",0,DevOps Engineer
+"Tom Bradley | Frontend | React, TypeScript, CSS.","Data Scientist — PhD preferred, causal inference, Bayesian methods, R.",0,Frontend Engineer
+"Sarah Kim | Product Manager | Roadmaps, user research, Agile.","Machine Learning Engineer — CUDA kernels, C++ inference optimization.",0,Product Manager
+"Ahmed Hassan | Security Analyst | SIEM, threat hunting.","Marketing Coordinator — social media scheduling, Canva, event logistics.",0,Security Analyst
+"Rachel Nguyen | QA | Selenium, Cypress, API testing.","Principal Architect — 15 years enterprise Java, TOGAF, pre-sales only.",0,QA Engineer
+"Chris Patel | Full Stack | Django, React, PostgreSQL.","Executive Assistant — calendar management, travel booking, office admin.",0,Full Stack Engineer
+"Nina Weber | BI Developer | Power BI, DAX, SQL Server.","Research Scientist — wet lab PCR, cell culture, bench chemistry required.",0,BI Developer
+"David Okafor | iOS Developer | Swift, SwiftUI.","Android Developer — Kotlin, Jetpack Compose, Google Play expertise.",0,iOS Developer
+"Jessica Morales | HR Generalist | Recruiting, Workday.","Software Engineer — Rust systems programming, low-latency trading.",0,HR Generalist
+"Kevin Zhang | Cloud Architect | AWS, multi-account.","Junior Data Analyst — internship, coursework in SQL only, no experience.",0,Cloud Architect
+"Amanda Lewis | UX Designer | Figma, usability testing.","Backend Engineer — Go microservices, gRPC, high-throughput APIs.",0,UX Designer
+"Brian O'Connor | Sales Engineer | Demos, Python integrations.","Cybersecurity Pen Tester — OSCP, red team engagements, exploit development.",0,Sales Engineer
+"Fatima Ali | NLP PhD | Transformers, PyTorch.","Warehouse Associate — forklift certification, pick/pack, physical labor.",0,NLP Research
+"George Miller | Sysadmin | Windows Server, VMware.","Creative Director — agency leadership, pitch decks, TV campaign concepting.",0,Sysadmin
+"Hannah Brooks | Content | SEO, WordPress.","Database Administrator — Oracle RAC, PL/SQL tuning, on-prem only.",0,Content Marketing
+"Ivan Petrov | Embedded C, ARM firmware.","Data Scientist — computer vision for manufacturing, OpenCV, edge deployment.",0,Embedded Engineer
+"Julia Santos | Customer Success | SaaS onboarding.","Litigation Attorney — bar admission, courtroom experience required.",0,Customer Success
+"Kyle Adams | Data Engineer | Spark, Airflow, Snowflake.","Graphic Designer — print layout, typography, no data pipeline work.",0,Data Engineer
+"Laura Chen | Graphic Designer | Adobe CC, branding.","Site Reliability Engineer — SLOs, error budgets, Go/Python tooling.",0,Graphic Designer
+"Marcus Johnson | Network Engineer | Cisco, BGP.","Clinical Psychologist — licensed therapist, telehealth counseling.",0,Network Engineer
+"Olivia Grant | Pharmacist | hospital dispensing.","Robotics Engineer — ROS2, motion planning, PhD robotics.",0,Pharmacist
+"Paul Rivera | Mechanical | SolidWorks, FEA.","Full Stack — Node.js, React, early-stage startup generalist.",0,Mechanical Engineer
+"Quinn Taylor | Technical Writer | API docs.","Electrician — journeyman license, commercial wiring installs.",0,Technical Writer
+"Rita Kapoor | Finance Analyst | FP&A, Excel.","Machine Learning Engineer — recommendation systems, TensorFlow Serving.",0,Finance Analyst
+"Samuel Wright | Unity game developer | C#.","Corporate Trainer — facilitation, LMS administration, soft skills workshops.",0,Game Developer
+"Alex Turner | Junior bootcamp grad | 6 months React tutorials, one todo app, seeking first role.","Staff Engineer — 10+ years distributed systems, architecture reviews, mentorship.",0,Junior vs Senior
+"Senior Staff Engineer | 12 years | led 40-person platform org, Kafka at billions/day, published SRE book.","Junior Frontend Intern — HTML/CSS basics, willing to learn React.",0,Senior vs Junior
+"Nurse practitioner | 8 years ICU, ACLS, patient triage, Epic EMR.","Software Engineer — build payment microservices, Java, Kubernetes.",0,Cross-domain
+"Commercial pilot | 3000 flight hours, ATP, Boeing 737 type rating.","Data Analyst — SQL dashboards for marketing team, remote OK.",0,Cross-domain
+"Chef de cuisine | menu costing, kitchen management, French cuisine.","DevOps Engineer — Terraform modules, AWS EKS, on-call rotation.",0,Cross-domain
+"Paralegal | contract review, discovery, Westlaw, litigation support.","Mobile iOS Engineer — SwiftUI, Core Data, App Store releases.",0,Cross-domain
+"Python data analyst | pandas, matplotlib, 2 years reporting. Skills: SQL, Excel. No ML production.","Senior ML Engineer — production LLM fine-tuning, RLHF pipelines, GPU clusters.",0,Partial overlap hard negative
+"Java backend developer | Spring, REST, 5 years. Mentioned 'interest in data' once.","Data Scientist — end-to-end ML products, feature stores, model monitoring.",0,Partial overlap hard negative
+"Marketing manager | Google Analytics, A/B tests on landing pages, HubSpot.","Research Data Scientist — causal inference, econometrics, PhD preferred.",0,Partial overlap hard negative
+"IT support | ticket queue, Active Directory password resets, basic scripting.","Cloud Security Engineer — IAM, CSPM, threat modeling, AWS Security Specialty.",0,Partial overlap hard negative
+"Scrum Master | ceremonies, Jira, no hands-on coding.","Backend Engineer — implement authentication service, OAuth2, PostgreSQL.",0,Partial overlap hard negative

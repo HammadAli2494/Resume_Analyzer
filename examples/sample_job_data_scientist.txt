@@ -1,0 +1,25 @@
+Senior Data Scientist
+
+About the role
+We are looking for a Senior Data Scientist to own predictive modeling, experimentation,
+and analytics for our B2B SaaS platform. You will work with product, engineering, and
+go-to-market teams to turn data into decisions.
+
+Requirements
+• 3+ years of experience in data science or applied machine learning roles
+• Strong Python skills (pandas, scikit-learn) and production-quality code
+• Advanced SQL and experience with relational databases (PostgreSQL preferred)
+• Solid foundation in statistics, hypothesis testing, and A/B experimentation
+• Experience building and evaluating supervised learning models (classification, regression)
+• Ability to explain technical results to non-technical stakeholders
+• Familiarity with cloud deployment (AWS) and containerization (Docker) is a plus
+
+Nice to have
+• M.S. or Ph.D. in Statistics, Computer Science, or a quantitative field
+• Experience with churn, LTV, or customer analytics in SaaS
+• Tableau or similar BI tooling
+
+Responsibilities
+• Develop and maintain ML models for customer success and revenue teams
+• Design and analyze product experiments
+• Collaborate on data pipelines and metric definitions with data engineering

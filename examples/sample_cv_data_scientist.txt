@@ -1,0 +1,31 @@
+ALEX RIVERA
+alex.rivera@email.com | +1 (555) 123-4567 | Chicago, IL
+LinkedIn: linkedin.com/in/alexrivera | GitHub: github.com/arivera-ds
+
+PROFESSIONAL SUMMARY
+Data Scientist with 4 years of experience building predictive models, experimentation pipelines,
+and analytics products in Python. Strong background in SQL, statistics, and communicating
+insights to product and engineering teams.
+
+EXPERIENCE
+
+Data Scientist | CloudMetrics Inc. | 2021 – Present
+• Built churn and LTV models in Python (scikit-learn, pandas) improving retention campaigns by 12%.
+• Designed A/B tests and analyzed experiment results for onboarding and pricing flows.
+• Created ETL jobs and dashboards using SQL (PostgreSQL) and internal BI tools.
+• Partnered with engineers to deploy model scoring APIs with Docker on AWS.
+
+Junior Data Analyst | RetailPulse | 2019 – 2021
+• Automated weekly sales reporting with SQL and Python.
+• Delivered Tableau dashboards for merchandising and marketing stakeholders.
+
+EDUCATION
+M.S. Statistics | State University | 2019
+B.S. Mathematics | State University | 2017
+
+TECHNICAL SKILLS
+Python, SQL, pandas, NumPy, scikit-learn, machine learning, statistics, A/B testing,
+data visualization, Git, Docker, AWS, communication, agile
+
+PROJECTS
+Customer Segmentation — clustering and RFM analysis for e-commerce cohorts (Python, SQL).
