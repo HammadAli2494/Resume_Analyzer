@@ -1,0 +1,86 @@
+{
+  "confusion_matrix": {
+    "labels": [
+      "Not fit (0)",
+      "Good fit (1)"
+    ],
+    "matrix": [
+      [
+        89,
+        0
+      ],
+      [
+        0,
+        98
+      ]
+    ],
+    "tn": 89,
+    "fp": 0,
+    "fn": 0,
+    "tp": 98
+  },
+  "roc_curve": [
+    {
+      "fpr": 0.0,
+      "tpr": 0.0
+    },
+    {
+      "fpr": 0.0,
+      "tpr": 0.0102
+    },
+    {
+      "fpr": 0.0,
+      "tpr": 1.0
+    },
+    {
+      "fpr": 1.0,
+      "tpr": 1.0
+    }
+  ],
+  "model_comparison": [
+    {
+      "model": "TF-IDF rule baseline",
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    {
+      "model": "logistic_regression",
+      "f1": 1.0,
+      "roc_auc": 1.0
+    }
+  ],
+  "error_analysis": [],
+  "test_class_balance": {
+    "1": 98,
+    "0": 89
+  },
+  "dataset_provenance": {
+    "rows_loaded": 800,
+    "rows_used": 800,
+    "duplicate_or_conflicting_pairs_removed": 0,
+    "unique_job_descriptions": 16,
+    "unique_resumes": 800,
+    "groups_separated": "normalized job description text",
+    "generalization_target": "held-out job descriptions from this same file",
+    "real_world_accuracy": "unverified",
+    "dataset_kind": "project_csv",
+    "source_file": "data/processed/resume_job_pairs.csv",
+    "limitation": "Labels are project labels, not verified hiring decisions. This run held out every job description and did not share resumes across the split. A TF-IDF and skill-recall rule also scored 1.0 on that holdout, so the labels are separable from overlap features. Real-world hiring accuracy is unverified."
+  },
+  "split_overlap": {
+    "train_test": {
+      "shared_job_groups": 0,
+      "shared_resume_groups": 0
+    },
+    "train_val": {
+      "shared_job_groups": 0,
+      "shared_resume_groups": 0
+    },
+    "val_test": {
+      "shared_job_groups": 0,
+      "shared_resume_groups": 0
+    }
+  },
+  "real_world_accuracy": "unverified",
+  "note": "These figures are for the grouped split of the training file. They are not hiring accuracy."
+}

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getProfile, login as apiLogin, register as apiRegister, setAuthToken } from "../api/client";
+import { getProfile, login as apiLogin, logoutRequest, register as apiRegister, setAuthToken } from "../api/client";
 
 const AuthContext = createContext(null);
 
@@ -8,39 +8,51 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      setAuthToken(token);
-      getProfile()
-        .then(setUser)
-        .catch(() => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          setAuthToken(null);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    const onLogout = () => setUser(null);
+    window.addEventListener("auth:logout", onLogout);
+    return () => window.removeEventListener("auth:logout", onLogout);
   }, []);
 
-  const login = async (username, password) => {
-    const data = await apiLogin(username, password);
-    localStorage.setItem("access_token", data.access);
-    localStorage.setItem("refresh_token", data.refresh);
-    setAuthToken(data.access);
-    setUser({ username });
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    setAuthToken(token);
+    getProfile()
+      .then(setUser)
+      .catch(() => {
+        localStorage.removeItem("access_token");
+        setAuthToken(null);
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const login = async (email, password) => {
+    const data = await apiLogin(email, password);
+    localStorage.setItem("access_token", data.token);
+    setAuthToken(data.token);
+    setUser(data.user);
     return data;
   };
 
-  const register = async (username, password, email = "") => {
-    await apiRegister(username, password, email);
-    return login(username, password);
+  const register = async (name, email, password) => {
+    const data = await apiRegister(name, email, password);
+    localStorage.setItem("access_token", data.token);
+    setAuthToken(data.token);
+    setUser(data.user);
+    return data;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await logoutRequest();
+    } catch {
+      // The token is discarded locally even if the server is unreachable.
+    }
     localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
     setAuthToken(null);
     setUser(null);
   };

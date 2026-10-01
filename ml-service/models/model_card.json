@@ -1,0 +1,66 @@
+{
+  "version": "20260930_115657",
+  "model_type": "logistic_regression",
+  "trained_at": "2026-09-30T11:56:57.207227+00:00",
+  "sklearn_version": "1.9.1",
+  "skill_matcher": "canonical_v1",
+  "feature_names": [
+    "tfidf_cosine",
+    "char_cosine",
+    "semantic_cosine",
+    "skill_recall",
+    "skill_precision",
+    "skill_jaccard",
+    "skill_count_resume",
+    "skill_count_jd",
+    "resume_length_norm",
+    "jd_length_norm"
+  ],
+  "dataset_size": 800,
+  "test_samples": 187,
+  "test_metrics": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0
+  },
+  "baselines": {
+    "tfidf_skill_rule": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    }
+  },
+  "dataset_kind": "project_csv",
+  "dataset_provenance": {
+    "rows_loaded": 800,
+    "rows_used": 800,
+    "duplicate_or_conflicting_pairs_removed": 0,
+    "unique_job_descriptions": 16,
+    "unique_resumes": 800,
+    "groups_separated": "normalized job description text",
+    "generalization_target": "held-out job descriptions from this same file",
+    "real_world_accuracy": "unverified",
+    "dataset_kind": "project_csv",
+    "source_file": "data/processed/resume_job_pairs.csv",
+    "limitation": "Labels are project labels, not verified hiring decisions. This run held out every job description and did not share resumes across the split. A TF-IDF and skill-recall rule also scored 1.0 on that holdout, so the labels are separable from overlap features. Real-world hiring accuracy is unverified."
+  },
+  "split_overlap": {
+    "train_test": {
+      "shared_job_groups": 0,
+      "shared_resume_groups": 0
+    },
+    "train_val": {
+      "shared_job_groups": 0,
+      "shared_resume_groups": 0
+    },
+    "val_test": {
+      "shared_job_groups": 0,
+      "shared_resume_groups": 0
+    }
+  },
+  "real_world_accuracy": "unverified"
+}

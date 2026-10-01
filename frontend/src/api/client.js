@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:5000/api" : "");
+
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL,
   headers: { Accept: "application/json" },
 });
 
@@ -16,95 +18,89 @@ if (saved) setAuthToken(saved);
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const url = error.config?.url || "";
+    const hadToken = Boolean(localStorage.getItem("access_token"));
+    if (error.response?.status === 401 && hadToken && !url.includes("/auth/login")) {
       localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
       setAuthToken(null);
+      sessionStorage.setItem("auth_notice", "Your session has expired. Please sign in again.");
+      window.dispatchEvent(new Event("auth:logout"));
     }
     return Promise.reject(error);
   }
 );
 
-// —— Auth ——
-export async function login(username, password) {
-  const { data } = await api.post("/auth/login/", { username, password });
+export function errorMessage(error, fallback = "Something went wrong.") {
+  return error.response?.data?.error || fallback;
+}
+
+export async function login(email, password) {
+  const { data } = await api.post("/auth/login", { email, password });
   return data;
 }
 
-export async function register(username, password, email = "") {
-  const { data } = await api.post("/auth/register/", { username, password, email });
+export async function register(name, email, password) {
+  const { data } = await api.post("/auth/register", { name, email, password });
   return data;
+}
+
+export async function logoutRequest() {
+  await api.post("/auth/logout");
 }
 
 export async function getProfile() {
-  const { data } = await api.get("/auth/me/");
+  const { data } = await api.get("/auth/me");
   return data;
 }
 
-// —— Screening ——
-export async function analyzeResume(resumeFile, jobDescription, options = {}) {
-  const formData = new FormData();
-  formData.append("resume", resumeFile);
-  formData.append("job_description", jobDescription);
-  if (options.save) formData.append("save", "true");
-  const { data } = await api.post("/analyze/", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+export async function fetchJobs(archived = false) {
+  const { data } = await api.get("/jobs", { params: { archived } });
   return data;
 }
 
-// —— ML metrics ——
-export async function fetchMlInfo() {
-  const { data } = await api.get("/ml/info/");
+export async function createJob(payload) {
+  const { data } = await api.post("/jobs", payload);
   return data;
 }
 
-export async function fetchMlMetrics() {
-  const { data } = await api.get("/ml/metrics/");
+export async function updateJob(jobId, payload) {
+  const { data } = await api.patch(`/jobs/${jobId}`, payload);
   return data;
 }
 
-export async function fetchMlCvReport() {
-  const { data } = await api.get("/ml/cv-report/");
+export async function archiveJob(jobId, archived = true) {
+  const { data } = await api.post(`/jobs/${jobId}/archive`, { archived });
   return data;
 }
 
-export async function fetchMlEvaluation() {
-  const { data } = await api.get("/ml/evaluation/");
+export async function screenResume(jobId, file, version) {
+  const form = new FormData();
+  form.append("resumes", file);
+  if (version != null) form.append("expected_version", String(version));
+  const { data } = await api.post(`/jobs/${jobId}/screen`, form);
   return data;
 }
 
-// —— Jobs (recruiter) ——
-export async function fetchJobs() {
-  const { data } = await api.get("/jobs/");
+export async function fetchJob(jobId, params = {}) {
+  const { data } = await api.get(`/jobs/${jobId}`, { params });
   return data;
 }
 
-export async function createJob(title, description) {
-  const { data } = await api.post("/jobs/", { title, description });
-  return data;
-}
-
-export async function fetchJob(jobId) {
-  const { data } = await api.get(`/jobs/${jobId}/`);
+export async function renameCandidate(jobId, analysisId, candidateName) {
+  const { data } = await api.patch(`/jobs/${jobId}/analyses/${analysisId}`, { candidateName });
   return data;
 }
 
 export async function deleteJob(jobId) {
-  await api.delete(`/jobs/${jobId}/`);
+  await api.delete(`/jobs/${jobId}`);
 }
 
-export async function batchScreen(jobId, files) {
-  const form = new FormData();
-  files.forEach((f) => form.append("resumes", f));
-  const { data } = await api.post(`/jobs/${jobId}/screen/`, form, {
-    headers: { "Content-Type": "multipart/form-data" },
+
+export async function downloadJobCsv(jobId, version) {
+  const { data } = await api.get(`/jobs/${jobId}/export.csv`, {
+    params: version ? { version } : {},
+    responseType: "blob",
   });
-  return data;
-}
-
-export async function downloadJobCsv(jobId) {
-  const { data } = await api.get(`/jobs/${jobId}/export.csv`, { responseType: "blob" });
   const url = window.URL.createObjectURL(new Blob([data]));
   const link = document.createElement("a");
   link.href = url;
@@ -113,32 +109,7 @@ export async function downloadJobCsv(jobId) {
   window.URL.revokeObjectURL(url);
 }
 
-// —— Training data ——
-export async function fetchTrainingPairs(params = {}) {
-  const { data } = await api.get("/training/pairs/", { params });
-  return data;
-}
-
-export async function fetchTrainingStats() {
-  const { data } = await api.get("/training/stats/");
-  return data;
-}
-
-export async function createTrainingPair(payload) {
-  const { data } = await api.post("/training/pairs/", payload);
-  return data;
-}
-
-export async function importTrainingCSV(file) {
-  const form = new FormData();
-  form.append("file", file);
-  const { data } = await api.post("/training/import-csv/", form, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return data;
-}
-
-export async function exportAndTrain() {
-  const { data } = await api.post("/training/export-and-train/");
+export async function fetchHistory() {
+  const { data } = await api.get("/history");
   return data;
 }

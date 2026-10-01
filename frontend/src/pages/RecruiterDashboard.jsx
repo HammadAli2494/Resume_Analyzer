@@ -1,133 +1,143 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { createJob, deleteJob, fetchJobs } from "../api/client";
+import { toast } from "react-toastify";
+import { archiveJob, createJob, deleteJob, errorMessage, fetchJobs } from "../api/client";
+import JobForm from "../components/JobForm";
+import { Presence } from "../components/Motion";
 
 export default function RecruiterDashboard() {
   const [jobs, setJobs] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [archivedView, setArchivedView] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [creating, setCreating] = useState(false);
+  const [error, setError] = useState("");
+  const [pendingId, setPendingId] = useState("");
 
-  const load = async () => {
+  const load = async (archived = archivedView) => {
     setLoading(true);
     try {
-      setJobs(await fetchJobs());
+      setJobs(await fetchJobs(archived));
       setError("");
-    } catch {
-      setError("Could not load jobs. Run migrations and start Django.");
+    } catch (err) {
+      setError(errorMessage(err, "Could not load jobs."));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    load();
-  }, []);
+    load(archivedView);
+  }, [archivedView]);
 
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    if (!title.trim() || !description.trim()) return;
+  const handleCreate = async (payload) => {
     setCreating(true);
     try {
-      await createJob(title.trim(), description.trim());
-      setTitle("");
-      setDescription("");
-      await load();
+      await createJob(payload);
+      toast.success("Job created");
+      setShowForm(false);
+      setArchivedView(false);
+      await load(false);
     } catch (err) {
-      setError(err.response?.data?.error || "Failed to create job");
+      toast.error(errorMessage(err, "Could not create the job."));
     } finally {
       setCreating(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!confirm("Delete this job and all candidate screenings?")) return;
-    await deleteJob(id);
-    await load();
+  const handleArchive = async (job) => {
+    const verb = job.archived ? "Restore" : "Archive";
+    if (pendingId) return;
+    if (!window.confirm(`${verb} “${job.title}”? Analyses stay attached to this job.`)) return;
+    setPendingId(job.id);
+    try {
+      await archiveJob(job.id, !job.archived);
+      toast.success(job.archived ? "Job restored" : "Job archived");
+      await load();
+    } catch (err) {
+      toast.error(errorMessage(err, "Could not update the job."));
+    } finally {
+      setPendingId("");
+    }
+  };
+
+  const handleDelete = async (job) => {
+    if (pendingId) return;
+    if (!window.confirm(`Delete “${job.title}” and its saved analyses? Extracted resume text for those analyses will be removed.`)) return;
+    setPendingId(job.id);
+    try {
+      await deleteJob(job.id);
+      toast.success("Job deleted");
+      await load();
+    } catch (err) {
+      toast.error(errorMessage(err, "Could not delete the job."));
+    } finally {
+      setPendingId("");
+    }
   };
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-xl font-semibold text-white">Recruiter Dashboard</h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Create a job posting, upload many resumes, and rank candidates automatically.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-white">Jobs</h1>
+          <p className="text-sm text-gray-400 mt-1">Create a job, then screen resumes against that job.</p>
+        </div>
+        <div className="flex gap-2">
+          <button type="button" className="px-3 py-2 rounded-lg bg-surface-700 text-sm" onClick={() => setArchivedView((value) => !value)}>
+            {archivedView ? "Show active jobs" : "Show archived"}
+          </button>
+          {!archivedView && (
+            <button type="button" className="px-3 py-2 rounded-lg bg-accent text-sm text-white" onClick={() => setShowForm((value) => !value)}>
+              {showForm ? "Close form" : "New job"}
+            </button>
+          )}
+        </div>
       </div>
 
-      <form onSubmit={handleCreate} className="glass rounded-2xl p-6 space-y-4">
-        <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">
-          New job posting
-        </h3>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Job title (e.g. Data Scientist)"
-          className="w-full rounded-xl bg-surface-900 border border-surface-600 px-4 py-3 text-white focus:ring-2 focus:ring-accent/50 outline-none"
-        />
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={6}
-          placeholder="Full job description with required skills…"
-          className="w-full rounded-xl bg-surface-900 border border-surface-600 px-4 py-3 text-white focus:ring-2 focus:ring-accent/50 outline-none resize-y"
-        />
-        <button
-          type="submit"
-          disabled={creating}
-          className="px-6 py-2.5 rounded-xl bg-accent text-white font-medium disabled:opacity-50"
-        >
-          {creating ? "Creating…" : "Create job"}
-        </button>
-      </form>
+      <Presence show={showForm && !archivedView}>
+        <div className="glass rounded-2xl p-6">
+          <h2 className="text-lg text-white mb-4">New job</h2>
+          <JobForm submitLabel="Create job" busy={creating} onSubmit={handleCreate} />
+        </div>
+      </Presence>
 
-      {error && <p className="text-danger text-sm">{error}</p>}
+      {error && (
+        <div className="rounded-xl border border-danger/40 p-4 text-sm text-danger flex justify-between gap-3">
+          <span>{error}</span>
+          <button type="button" className="underline" onClick={() => load()}>Retry</button>
+        </div>
+      )}
 
-      <div className="glass rounded-2xl overflow-hidden">
-        <h3 className="px-6 py-4 text-sm font-medium text-gray-400 border-b border-surface-600">
-          Your jobs
-        </h3>
+      <section className="glass rounded-2xl overflow-hidden">
+        <h2 className="px-6 py-4 text-sm text-gray-400 border-b border-surface-600">{archivedView ? "Archived jobs" : "Your jobs"}</h2>
         {loading ? (
-          <p className="p-6 text-gray-500">Loading…</p>
+          <p className="p-6 text-gray-400">Loading jobs…</p>
         ) : jobs.length === 0 ? (
-          <p className="p-6 text-gray-500">No jobs yet. Create one above.</p>
+          <p className="p-6 text-gray-400">{archivedView ? "No archived jobs." : "No jobs yet. Create one to start screening."}</p>
         ) : (
           <ul className="divide-y divide-surface-600">
             {jobs.map((job) => (
-              <li key={job.id} className="px-6 py-4 flex items-center justify-between gap-4">
+              <li key={job.id} className="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <Link
-                    to={`/jobs/${job.id}`}
-                    className="font-medium text-white hover:text-accent-glow"
-                  >
-                    {job.title}
-                  </Link>
+                  <Link to={`/jobs/${job.id}`} className="font-medium text-white hover:text-accent-glow">{job.title}</Link>
                   <p className="text-xs text-gray-500 mt-1">
-                    {job.candidate_count} candidates screened
+                    {job.candidate_count} screened · version {job.version}
+                    {job.education_requirements ? "" : " · education not specified"}
                   </p>
                 </div>
-                <div className="flex gap-2 shrink-0">
-                  <Link
-                    to={`/jobs/${job.id}`}
-                    className="px-3 py-1.5 rounded-lg bg-surface-700 text-sm text-gray-200 hover:bg-surface-600"
-                  >
-                    Screen batch
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(job.id)}
-                    className="px-3 py-1.5 rounded-lg text-sm text-danger hover:bg-danger/10"
-                  >
-                    Delete
+                <div className="flex flex-wrap gap-2">
+                  <Link to={`/jobs/${job.id}`} className="px-3 py-1.5 rounded-lg bg-surface-700 text-sm">Open</Link>
+                  <button type="button" className="px-3 py-1.5 rounded-lg bg-surface-700 text-sm disabled:opacity-50" disabled={pendingId === job.id} onClick={() => handleArchive(job)}>
+                    {job.archived ? "Restore" : "Archive"}
                   </button>
+                  <button type="button" className="px-3 py-1.5 rounded-lg text-sm text-danger disabled:opacity-50" disabled={pendingId === job.id} onClick={() => handleDelete(job)}>Delete</button>
                 </div>
               </li>
             ))}
           </ul>
         )}
-      </div>
+      </section>
     </div>
   );
 }

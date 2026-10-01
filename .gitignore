@@ -1,3 +1,8 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
 # Python
 __pycache__/
 *.py[cod]
@@ -8,37 +13,24 @@ env/
 *.egg-info/
 .Python
 
-# Django
-backend/db.sqlite3
-backend/media/
-*.sqlite3
-
 # Node
 node_modules/
-frontend/dist/
+dist/
+build/
+coverage/
 
-# ML artifacts (retrain locally)
-ml/models/*.joblib
-ml/models/metrics.json
-ml/models/evaluation.json
-ml/models/cv_report.json
-ml/models/model_card.json
-ml/models/MODEL_CARD.md
-ml/data/processed/*.csv
-!ml/data/real_seed_pairs.csv
-docs/ML_REPORT.md
-
-# Secrets
-.env
-.env.local
-backend/.env
-
-# IDE / OS
-.idea/
-.vscode/
+# Logs and OS
+*.log
 .DS_Store
 Thumbs.db
-*.log
 
-# Build / cache
-*.local
+# IDE
+.idea/
+.vscode/
+
+# Local databases and uploads
+*.sqlite3
+backend/media/
+backend/uploads/
+backend/test/samples/
+resume-screening-share.zip

@@ -1,205 +1,147 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
+import { useEffect, useState } from "react";
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import ScoreRing from "./ScoreRing";
 
-function SkillBadge({ name, variant = "matched" }) {
-  const styles = {
-    matched: "bg-success/15 text-success border-success/30",
-    missing: "bg-danger/15 text-danger border-danger/30",
-    extra: "bg-accent/15 text-accent-glow border-accent/30",
-    detected: "bg-surface-600/50 text-gray-200 border-surface-600",
-    term: "bg-surface-700/80 text-gray-300 border-surface-600 font-mono text-xs",
+function Badge({ children, tone }) {
+  const tones = {
+    match: "bg-success/15 text-success border-success/30",
+    miss: "bg-danger/15 text-danger border-danger/30",
+    term: "bg-surface-700 text-gray-200 border-surface-600",
   };
-  return (
-    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm border ${styles[variant]}`}>
-      {variant === "matched" && "✔ "}
-      {variant === "missing" && "✗ "}
-      {name}
-    </span>
-  );
+  return <span className={`inline-flex px-3 py-1 rounded-full text-sm border ${tones[tone]}`}>{children}</span>;
 }
 
-export default function ResultsDashboard({ data }) {
+function percent(value) {
+  return value == null || Number.isNaN(Number(value)) ? null : Math.round(Number(value) * 10) / 10;
+}
+
+export default function ResultsDashboard({ data, onRename, renaming = false }) {
+  const [name, setName] = useState(data.candidate_name || "");
+  useEffect(() => {
+    setName(data.candidate_name || "");
+  }, [data.id, data.candidate_name]);
+  const match = percent(data.match_percentage) ?? 0;
+  const keyword = percent(data.keyword_score);
+  const wording = percent(data.wording_overlap);
+  const skills = data.skills_specified === false || data.skill_coverage == null ? null : percent(data.skill_coverage);
+  const signal = percent(data.model_signal);
   const chartData = [
-    ...(data.ml_available
-      ? [{ name: "ML match prob.", value: data.ml_match_probability, fill: "#22d3ee" }]
-      : []),
-    { name: "Keyword (TF-IDF)", value: data.keyword_score ?? data.match_percentage, fill: "#3b9eff" },
-    { name: "Semantic", value: data.semantic_score ?? 0, fill: "#34d399" },
-    { name: "Skill coverage", value: data.skill_coverage, fill: "#fbbf24" },
-    { name: "Overall score", value: data.resume_score, fill: "#a78bfa" },
+    { name: "Job match", value: match, fill: "#3b9eff" },
+    ...(keyword == null ? [] : [{ name: "Keyword overlap", value: keyword, fill: "#5eb8ff" }]),
+    ...(wording == null ? [] : [{ name: "Wording overlap", value: wording, fill: "#94a3b8" }]),
+    ...(skills == null ? [] : [{ name: "Skill coverage", value: skills, fill: "#34d399" }]),
+    ...(signal == null ? [] : [{ name: "Classifier signal", value: signal, fill: "#fbbf24" }]),
   ];
 
-  const scoreColor =
-    data.match_percentage >= 80
-      ? "#34d399"
-      : data.match_percentage >= 60
-        ? "#fbbf24"
-        : "#f87171";
-
   return (
-    <section className="space-y-6">
-      <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-success animate-pulse" />
-        Analysis results
-      </h2>
-
-      <div className="flex flex-wrap gap-2 text-xs">
-        {data.ml_available && (
-          <span className="px-2 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-            ML: {data.ml_prediction} · {data.ml_confidence}% confidence · v{data.ml_model_version}
-          </span>
-        )}
-        {data.semantic_method && (
-          <span className="text-gray-500 font-mono">{data.semantic_method}</span>
-        )}
+    <section className="space-y-6" aria-label="Analysis result">
+      <div>
+        <h3 className="text-lg font-semibold text-white">{data.candidate_name || data.resume_filename || "Resume"}</h3>
+        <p className="text-xs text-gray-500 mt-1">
+          {data.name_source === "recruiter"
+            ? "Candidate name entered by you."
+            : "This name comes from the file name, not from the resume text."}
+        </p>
+        {data.job_version ? <p className="text-xs text-gray-500 mt-1">Scored against job version {data.job_version}.</p> : null}
+        <p className="text-sm text-gray-400 mt-2">{data.explanation}</p>
       </div>
-
-      <div className="grid lg:grid-cols-3 gap-6">
-        <div className="glass rounded-2xl p-6 flex flex-col items-center">
-          <div className="relative">
-            <ScoreRing
-              value={data.ml_match_probability ?? data.match_percentage}
-              label={data.ml_available ? "ML match %" : "Overall match"}
-              color={scoreColor}
+      {onRename && (
+        <form
+          className="flex flex-col sm:flex-row gap-2 sm:items-end"
+          onSubmit={(event) => {
+            event.preventDefault();
+            onRename(name);
+          }}
+        >
+          <label className="block text-sm text-gray-300 flex-1">
+            Candidate name
+            <input
+              className="mt-1 w-full rounded-xl bg-surface-900 border border-surface-600 px-3 py-2 text-white"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
             />
-          </div>
-          <p className="mt-4 text-center text-sm text-gray-400">
-            {data.ml_available
-              ? "Trained classifier probability (primary score)"
-              : "Train ML model for supervised match probability"}
-          </p>
-        </div>
+          </label>
+          <button type="submit" disabled={renaming || name.trim().length < 2} className="px-4 py-2 rounded-xl bg-surface-700 text-sm disabled:opacity-50">
+            {renaming ? "Saving…" : "Save name"}
+          </button>
+        </form>
+      )}
 
-        <div className="glass rounded-2xl p-6 lg:col-span-2">
-          <h3 className="text-sm font-medium text-gray-400 mb-4">Score breakdown</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={chartData} layout="vertical" margin={{ left: 10, right: 20 }}>
-              <XAxis type="number" domain={[0, 100]} tick={{ fill: "#9ca3af", fontSize: 12 }} />
-              <YAxis type="category" dataKey="name" width={120} tick={{ fill: "#e5e7eb", fontSize: 11 }} />
-              <Tooltip
-                contentStyle={{ background: "#1a2030", border: "1px solid #252d3d", borderRadius: "8px" }}
-                formatter={(v) => [`${v}%`, "Score"]}
-              />
-              <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={24}>
-                {chartData.map((entry, i) => (
-                  <Cell key={i} fill={entry.fill} />
-                ))}
+      <div className="grid lg:grid-cols-[180px_1fr] gap-6 items-center">
+        <ScoreRing value={match} label="Job match" />
+        <div className="h-56">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} layout="vertical" margin={{ left: 16, right: 12 }}>
+              <XAxis type="number" domain={[0, 100]} tick={{ fill: "#94a3b8", fontSize: 12 }} />
+              <YAxis type="category" dataKey="name" width={120} tick={{ fill: "#e5e7eb", fontSize: 12 }} />
+              <Tooltip formatter={(value) => [`${value}%`, ""]} />
+              <Bar dataKey="value" radius={[0, 6, 6, 0]}>
+                {chartData.map((entry) => <Cell key={entry.name} fill={entry.fill} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-          <p className="text-center text-2xl font-bold text-white mt-2">
-            Resume score: <span className="text-accent-glow">{data.resume_score}</span>/100
-          </p>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="glass rounded-2xl p-6">
-          <h3 className="text-sm font-medium text-success mb-3">Top matching terms</h3>
-          <div className="flex flex-wrap gap-2">
-            {(data.top_matching_terms || []).map((t) => (
-              <SkillBadge key={t} name={t} variant="term" />
-            ))}
-            {!data.top_matching_terms?.length && (
-              <p className="text-gray-500 text-sm">No overlap terms found.</p>
-            )}
-          </div>
+      <dl className="grid sm:grid-cols-2 gap-3 text-sm">
+        <div className="rounded-xl bg-surface-900/60 p-3">
+          <dt className="text-gray-500">Keyword overlap</dt>
+          <dd className="text-white mt-1">{keyword == null ? "Not available" : `${keyword}%`}</dd>
         </div>
-        <div className="glass rounded-2xl p-6">
-          <h3 className="text-sm font-medium text-danger mb-3">Top missing terms (from JD)</h3>
-          <div className="flex flex-wrap gap-2">
-            {(data.top_missing_terms || []).map((t) => (
-              <SkillBadge key={t} name={t} variant="term" />
-            ))}
-          </div>
+        <div className="rounded-xl bg-surface-900/60 p-3">
+          <dt className="text-gray-500">Wording overlap</dt>
+          <dd className="text-white mt-1">{wording == null ? "Not available" : `${wording}% of shared character patterns`}</dd>
         </div>
-      </div>
+        <div className="rounded-xl bg-surface-900/60 p-3">
+          <dt className="text-gray-500">Required skill coverage</dt>
+          <dd className="text-white mt-1">{skills == null ? "Not specified" : `${skills}%`}</dd>
+        </div>
+        <div className="rounded-xl bg-surface-900/60 p-3">
+          <dt className="text-gray-500">Classifier signal</dt>
+          <dd className="text-white mt-1">{signal == null ? "Not used" : `${signal} — uncalibrated`}</dd>
+        </div>
+      </dl>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="glass rounded-2xl p-6">
-          <h3 className="text-sm font-medium text-success mb-3">Matched skills</h3>
-          <div className="flex flex-wrap gap-2">
-            {data.matched_skills?.length ? (
-              data.matched_skills.map((s) => <SkillBadge key={s} name={s} variant="matched" />)
-            ) : (
-              <p className="text-gray-500 text-sm">None detected.</p>
-            )}
-          </div>
-        </div>
-        <div className="glass rounded-2xl p-6">
-          <h3 className="text-sm font-medium text-danger mb-3">Missing skills</h3>
-          <div className="flex flex-wrap gap-2">
-            {data.missing_skills?.length ? (
-              data.missing_skills.map((s) => <SkillBadge key={s} name={s} variant="missing" />)
-            ) : (
-              <p className="text-gray-500 text-sm">Full skill coverage.</p>
-            )}
-          </div>
-        </div>
-      </div>
+      {data.model_lean && <p className="text-sm text-gray-300">{data.model_lean}</p>}
+      {data.model_note && <p className="text-sm text-gray-500">{data.model_note}</p>}
 
-      {data.entities && (
-        <div className="glass rounded-2xl p-6 grid sm:grid-cols-2 gap-4 text-sm">
-          {data.entities.organizations?.length > 0 && (
-            <div>
-              <span className="text-gray-500">Organizations: </span>
-              {data.entities.organizations.join(", ")}
-            </div>
-          )}
-          {data.entities.job_titles?.length > 0 && (
-            <div>
-              <span className="text-gray-500">Titles detected: </span>
-              {data.entities.job_titles.join(", ")}
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className="glass rounded-2xl p-6">
-        <h3 className="text-sm font-medium text-gray-400 mb-3">All skills on resume</h3>
+      <div className="space-y-3">
+        <h4 className="text-sm text-gray-400">Matching skills</h4>
         <div className="flex flex-wrap gap-2">
-          {data.detected_skills?.map((s) => (
-            <SkillBadge key={s} name={s} variant="detected" />
-          ))}
+          {(data.matched_skills || []).length
+            ? data.matched_skills.map((skill) => <Badge key={skill} tone="match">{skill}</Badge>)
+            : <span className="text-sm text-gray-500">None found in the resume text.</span>}
+        {(data.skill_evidence || []).map((item) => (
+          <p key={`${item.label}-${item.evidence}`} className="text-xs text-gray-500">
+            {item.label}: “{item.evidence}”
+          </p>
+        ))}
+        </div>
+        <h4 className="text-sm text-gray-400">Missing required skills</h4>
+        <div className="flex flex-wrap gap-2">
+          {(data.missing_skills || []).length
+            ? data.missing_skills.map((skill) => <Badge key={skill} tone="miss">{skill}</Badge>)
+            : <span className="text-sm text-gray-500">No listed skill was missing from the resume text.</span>}
+        </div>
+        <h4 className="text-sm text-gray-400">Shared terms</h4>
+        <div className="flex flex-wrap gap-2">
+          {(data.top_matching_terms || []).map((term) => <Badge key={`m-${term}`} tone="term">{term}</Badge>)}
+        </div>
+        <h4 className="text-sm text-gray-400">Job terms not found in the resume</h4>
+        <div className="flex flex-wrap gap-2">
+          {(data.top_missing_terms || []).map((term) => <Badge key={`x-${term}`} tone="term">{term}</Badge>)}
         </div>
       </div>
 
-      <div className="glass rounded-2xl p-6 border-accent/20">
-        <h3 className="text-sm font-medium text-accent-glow mb-3">
-          {data.llm_available ? "AI coach feedback (LLM)" : "Coaching tips"}
-        </h3>
-        <ul className="space-y-2">
-          {(data.llm_feedback?.length ? data.llm_feedback : data.suggestions)?.map((tip, i) => (
-            <li key={i} className="flex gap-2 text-sm text-gray-300">
-              <span className="text-accent shrink-0">→</span>
-              {tip}
-            </li>
-          ))}
-        </ul>
-        {data.resume_improvements?.length > 0 && (
-          <>
-            <h3 className="text-sm font-medium text-white mt-4 mb-2">Suggested rewrites</h3>
-            <ul className="space-y-2">
-              {data.resume_improvements.map((tip, i) => (
-                <li key={i} className="text-sm text-gray-400 pl-4 border-l-2 border-accent/30">
-                  {tip}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
-      {data.saved && (
-        <p className="text-success text-sm">Saved to your screening history.</p>
+      {data.experience_requirements && (
+        <p className="text-sm text-gray-300">Experience requirement, for reviewers only and not scored: {data.experience_requirements}</p>
       )}
+      <p className="text-sm text-gray-300">Education, for reviewers only and not scored: {data.education_status || "Not specified"}</p>
+      <ul className="list-disc pl-5 text-sm text-gray-300 space-y-1">
+        {(data.recommendations || []).map((note) => <li key={note}>{note}</li>)}
+      </ul>
+      <p className="text-xs text-gray-500">{data.score_disclaimer}</p>
+      {data.duplicate && <p className="text-sm text-gray-400">This file was already analyzed for this job version.</p>}
     </section>
   );
 }

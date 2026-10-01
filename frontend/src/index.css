@@ -6,6 +6,20 @@ body {
   @apply bg-surface-900 text-gray-100 antialiased min-h-screen;
 }
 
+:focus-visible {
+  outline: 2px solid #3b9eff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer utilities {
   .glass {
     @apply bg-surface-800/80 backdrop-blur-md border border-surface-600/50;

@@ -1,0 +1,24 @@
+{
+  "n_splits": 4,
+  "splitter": "GroupKFold",
+  "groups_separated": "normalized job description text",
+  "dataset_path_name": "resume_job_pairs.csv",
+  "dataset_size": 800,
+  "unique_job_descriptions": 16,
+  "model": "logistic_regression",
+  "skill_matcher": "canonical_v1",
+  "note": "GroupKFold on this project CSV. Job descriptions are not shared across a fold. Resume text may still overlap. This is not real-world hiring accuracy and it is not the holdout score of the saved classifier.",
+  "real_world_accuracy": "unverified",
+  "folds_used": 4,
+  "metrics_mean": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "roc_auc": 1.0
+  },
+  "metrics_std": {
+    "f1": 0.0,
+    "roc_auc": 0.0
+  }
+}
